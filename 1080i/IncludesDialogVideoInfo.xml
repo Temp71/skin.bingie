@@ -349,13 +349,14 @@
 							<onback condition="!String.IsEmpty(Window(Home).Property(FadeFanart))">ClearProperty(FadeFanart,home)</onback>
 							<onback>452</onback>
 							<onback condition="!String.IsEmpty(Window(Home).Property(AnimationRight))">ClearProperty(AnimationRight,home)</onback>						
-							<!-- Play/Resume via 5050 Container (next episode) -->
-                            <control type="radiobutton" id="51">
-                                <visible>Skin.HasSetting(videoinfo_button_play_next)</visible>
+							<!-- Play/Resume via 5050 Container (next episode) – only for library TV shows -->
+							<control type="radiobutton" id="51">
+								<visible>Skin.HasSetting(videoinfo_button_play_next)</visible>
 								<visible>Control.IsVisible(5050) + String.IsEqual(ListItem.dbtype,tvshow)</visible>
-                                <include content="Bingie_InfoDialog_Button_Texture">
-                                    <param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
-                                </include>
+								<visible>!String.IsEmpty(ListItem.DBID)</visible>   <!-- NEW -->
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
+								</include>
 								<textcolor>$INFO[Skin.String(BingieButtonTextColor)]</textcolor>
 								<focusedcolor>$INFO[Skin.String(BingieSecondaryButtonFocusTextColor)]</focusedcolor>
 								<texturefocus border="10" background="true" colordiffuse="$INFO[Skin.String(ViewDetailsBorderFocusColor)]">bingie/border/default_button_focus.png</texturefocus>
@@ -366,25 +367,26 @@
 								<align>left</align>
 								<textoffsetx>52</textoffsetx>
 								<textoffsety>7</textoffsety>							
-                                <label>$VAR[PlayOrResumeSeasonEpisodeLabel2]</label>
+								<label>$VAR[PlayOrResumeSeasonEpisodeLabel2]</label>
 								<textwidth>163</textwidth>
-                                <radioposx>13</radioposx>
-                                <radiowidth>22</radiowidth>
-                                <radioheight>22</radioheight>
-                                <onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
+								<radioposx>13</radioposx>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
+								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
 								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(5050).ListItem.FileNameAndPath],resume),00:01,silent)</onclick>
 								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">RunScript(plugin.video.tmdb.bingie.helper,close_dialog=1190)</onclick>
-                                <onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(5050).ListItem.FileNameAndPath],resume),00:04,silent)</onclick>
-                            </control>
+								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(5050).ListItem.FileNameAndPath],resume),00:04,silent)</onclick>
+							</control>
 							
-							<!-- Play Next Episode with TMDB Helper -->
-                            <control type="radiobutton" id="8181">
+							<!-- Request button for non‑library TV shows (TMDb Helper) -->
+							<control type="radiobutton" id="8181">
 								<visible>Skin.HasSetting(videoinfo_button_play_next_tmdb)</visible>
 								<visible>Control.IsVisible(1234) + String.IsEqual(ListItem.dbtype,tvshow) + String.IsEqual(ListItem.Path,plugin://plugin.video.tmdb.bingie.helper/)</visible>
 								<visible>!String.IsEmpty(ListItem.UniqueID(tmdb))</visible>
-                                <include content="Bingie_InfoDialog_Button_Texture">
-                                    <param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
-                                </include>
+								<visible>String.IsEmpty(ListItem.DBID)</visible>   <!-- only when NOT in library -->
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/plus.png"/>   <!-- plus icon -->
+								</include>
 								<textcolor>$INFO[Skin.String(BingieButtonTextColor)]</textcolor>
 								<focusedcolor>$INFO[Skin.String(BingieSecondaryButtonFocusTextColor)]</focusedcolor>
 								<texturefocus border="10" background="true" colordiffuse="$INFO[Skin.String(ViewDetailsBorderFocusColor)]">bingie/border/default_button_focus.png</texturefocus>
@@ -396,23 +398,22 @@
 								<textoffsetx>52</textoffsetx>
 								<textoffsety>7</textoffsety>
 								<textwidth>163</textwidth>								
-                                <label>$VAR[PlayOrResumeSeasonEpisodeLabel4]</label>
-                                <radioposx>13</radioposx>
-                                <radiowidth>22</radiowidth>
-                                <radioheight>22</radioheight>
-                                <onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
-								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(1234).ListItem.FileNameAndPath],resume),00:01,silent)</onclick>
-								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">RunScript(plugin.video.tmdb.bingie.helper,close_dialog=1190)</onclick>
-                                <onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(1234).ListItem.FileNameAndPath],resume),00:04,silent)</onclick>
-                            </control>
+								<label>Request</label>
+								<radioposx>13</radioposx>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
+								<!-- REPLACE with your actual request add‑on command -->
+								<onclick>RunPlugin(plugin://plugin.video.kodiseerr/?mode=request&amp;type=tv&amp;id=$INFO[ListItem.UniqueID(tmdb)])</onclick>
+							</control>
 
-                            <!-- Play -->
-                            <control type="radiobutton" id="80">
+                            <!-- Play button – only when item is directly playable -->
+							<control type="radiobutton" id="80">
 								<visible>!Control.IsVisible(90) + !$EXP[IsTvShowDBTypeNoFallback]</visible>
 								<visible>!$EXP[IsSetDBType]</visible>
-                                <include content="Bingie_InfoDialog_Button_Texture">
-                                    <param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
-                                </include>
+								<visible>!String.IsEmpty(ListItem.DBID)</visible>   <!-- NEW: only show when playable -->
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
+								</include>
 								<textcolor>$INFO[Skin.String(BingieButtonTextColor)]</textcolor>
 								<focusedcolor>$INFO[Skin.String(BingieSecondaryButtonFocusTextColor)]</focusedcolor>
 								<texturefocus border="10" background="true" colordiffuse="$INFO[Skin.String(ViewDetailsBorderFocusColor)]">bingie/border/default_button_focus.png</texturefocus>
@@ -423,18 +424,45 @@
 								<align>left</align>
 								<textoffsetx>52</textoffsetx>
 								<textoffsety>7</textoffsety>
-								<textwidth>163</textwidth>								
-                                <label>$LOCALIZE[208]$INFO[ListItem.Season, $LOCALIZE[31000],]$INFO[ListItem.Episode,: $LOCALIZE[31001],]</label>
-                                <radioposx>13</radioposx>
-                                <radiowidth>22</radiowidth>
-                                <radioheight>22</radioheight>
+								<textwidth>163</textwidth>                                
+								<label>$LOCALIZE[208]$INFO[ListItem.Season, $LOCALIZE[31000],]$INFO[ListItem.Episode,: $LOCALIZE[31001],]</label>
+								<radioposx>13</radioposx>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
 								<onclick condition="!Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
 								<onclick condition="!String.IsEmpty(ListItem.FileNameAndPath) + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FileNameAndPath]),00:01,silent)</onclick>
 								<onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FolderPath]),00:01,silent)</onclick>
 								<onclick condition="Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">RunScript(plugin.video.tmdb.bingie.helper,close_dialog=1190)</onclick>
 								<onclick condition="!ListItem.IsFolder + !String.IsEmpty(ListItem.FileNameAndPath) + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FileNameAndPath]),00:04,silent)</onclick>
 								<onclick condition="!ListItem.IsFolder + String.IsEmpty(ListItem.FileNameAndPath) + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FolderPath]),00:04,silent)</onclick>
-                            </control>						
+							</control>
+
+							<!-- Request button – only when item is NOT playable (e.g., opens selection dialog) -->
+							<control type="radiobutton" id="8002">
+								<visible>!Control.IsVisible(90) + !$EXP[IsTvShowDBTypeNoFallback]</visible>
+								<visible>!$EXP[IsSetDBType]</visible>
+								<visible>String.IsEmpty(ListItem.DBID)</visible>   <!-- NEW: only show when NOT playable -->
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/plus.png"/> <!-- you may change the icon later -->
+								</include>
+								<textcolor>$INFO[Skin.String(BingieButtonTextColor)]</textcolor>
+								<focusedcolor>$INFO[Skin.String(BingieSecondaryButtonFocusTextColor)]</focusedcolor>
+								<texturefocus border="10" background="true" colordiffuse="$INFO[Skin.String(ViewDetailsBorderFocusColor)]">bingie/border/default_button_focus.png</texturefocus>
+								<texturenofocus/>
+								<height>52</height>
+								<width>224</width>
+								<aligny>center</aligny>
+								<align>left</align>
+								<textoffsetx>52</textoffsetx>
+								<textoffsety>7</textoffsety>
+								<textwidth>163</textwidth>                                
+								<label>Request</label>   <!-- CHANGE this text to whatever you like -->
+								<radioposx>13</radioposx>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
+								<!-- REPLACE the onclick with your request addon command -->
+								<onclick>RunPlugin(plugin://plugin.video.kodiseerr/?mode=request&amp;type=movie&amp;id=$INFO[ListItem.UniqueID(tmdb)])</onclick>
+							</control>					
 
                             <!-- Resume -->
                             <control type="radiobutton" id="90">
@@ -1668,64 +1696,100 @@
 								
 							</control>														
 							
-							<!-- Play/Resume via 5050 Container (next episode) -->
-                            <control type="radiobutton" id="51">
-                                <visible>Skin.HasSetting(videoinfo_button_play_next)</visible>
+							<!-- Play/Resume via 5050 Container (next episode) – only for library TV shows -->
+							<control type="radiobutton" id="51">
+								<visible>Skin.HasSetting(videoinfo_button_play_next)</visible>
 								<visible>Control.IsVisible(5050) + String.IsEqual(ListItem.dbtype,tvshow)</visible>
-                                <include>Bingie_InfoDialog_Button_Default_Defs</include>
-                                <include content="Bingie_InfoDialog_Button_Texture">
-                                    <param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
-                                </include>
-                                <label>$VAR[PlayOrResumeSeasonEpisodeLabel]</label>
-                                <radioposx>19</radioposx>
-								<radioposy>22</radioposy>
-                                <radiowidth>22</radiowidth>
-                                <radioheight>22</radioheight>
-                                <onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
+								<visible>!String.IsEmpty(ListItem.DBID)</visible>   <!-- NEW -->
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
+								</include>
+								<textcolor>$INFO[Skin.String(BingieButtonTextColor)]</textcolor>
+								<focusedcolor>$INFO[Skin.String(BingieSecondaryButtonFocusTextColor)]</focusedcolor>
+								<texturefocus border="10" background="true" colordiffuse="$INFO[Skin.String(ViewDetailsBorderFocusColor)]">bingie/border/default_button_focus.png</texturefocus>
+								<texturenofocus/>
+								<height>52</height>
+								<width>224</width>
+								<aligny>center</aligny>
+								<align>left</align>
+								<textoffsetx>52</textoffsetx>
+								<textoffsety>7</textoffsety>							
+								<label>$VAR[PlayOrResumeSeasonEpisodeLabel2]</label>
+								<textwidth>163</textwidth>
+								<radioposx>13</radioposx>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
+								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
 								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(5050).ListItem.FileNameAndPath],resume),00:01,silent)</onclick>
 								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">RunScript(plugin.video.tmdb.bingie.helper,close_dialog=1190)</onclick>
-                                <onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(5050).ListItem.FileNameAndPath],resume),00:04,silent)</onclick>
-                            </control>
+								<onclick condition="Integer.IsGreater(Container(5050).NumItems,0) + !Container(5050).IsUpdating + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(5050).ListItem.FileNameAndPath],resume),00:04,silent)</onclick>
+							</control>
 							
-							<!-- Play Next Episode with TMDB Helper -->
-                            <control type="radiobutton" id="8181">
-                                <visible>Skin.HasSetting(videoinfo_button_play_next_tmdb)</visible>
+							<!-- Request button for non‑library TV shows (TMDb Helper) -->
+							<control type="radiobutton" id="8181">
+								<visible>Skin.HasSetting(videoinfo_button_play_next_tmdb)</visible>
 								<visible>Control.IsVisible(1234) + String.IsEqual(ListItem.dbtype,tvshow) + String.IsEqual(ListItem.Path,plugin://plugin.video.tmdb.bingie.helper/)</visible>
 								<visible>!String.IsEmpty(ListItem.UniqueID(tmdb))</visible>
-                                <include>Bingie_InfoDialog_Button_Default_Defs</include>
-                                <include content="Bingie_InfoDialog_Button_Texture">
-                                    <param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
-                                </include>
-                                <label>$VAR[PlayOrResumeSeasonEpisodeLabel3]</label>
-                                <radioposx>19</radioposx>
-								<radioposy>22</radioposy>
-                                <radiowidth>22</radiowidth>
-                                <radioheight>22</radioheight>
-                                <onclick condition="!Container(1234).IsUpdating + !Integer.IsEqual(Container(1234).NumItems,0) + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
-								<onclick condition="!Container(1234).IsUpdating + !Integer.IsEqual(Container(1234).NumItems,0) + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(1234).ListItem.FileNameAndPath],resume),00:01,silent)</onclick>
-								<onclick condition="!Container(1234).IsUpdating + !Integer.IsEqual(Container(1234).NumItems,0) + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">RunScript(plugin.video.tmdb.bingie.helper,close_dialog=1190)</onclick>
-                                <onclick condition="!Container(1234).IsUpdating + !Integer.IsEqual(Container(1234).NumItems,0) + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[Container(1234).ListItem.FileNameAndPath],resume),00:04,silent)</onclick>
-                            </control>
+								<visible>String.IsEmpty(ListItem.DBID)</visible>   <!-- only when NOT in library -->
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/plus.png"/>   <!-- plus icon -->
+								</include>
+								<textcolor>$INFO[Skin.String(BingieButtonTextColor)]</textcolor>
+								<focusedcolor>$INFO[Skin.String(BingieSecondaryButtonFocusTextColor)]</focusedcolor>
+								<texturefocus border="10" background="true" colordiffuse="$INFO[Skin.String(ViewDetailsBorderFocusColor)]">bingie/border/default_button_focus.png</texturefocus>
+								<texturenofocus/>
+								<height>52</height>
+								<width>224</width>
+								<aligny>center</aligny>
+								<align>left</align>
+								<textoffsetx>52</textoffsetx>
+								<textoffsety>7</textoffsety>
+								<textwidth>163</textwidth>								
+								<label>Request</label>
+								<radioposx>13</radioposx>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
+								<!-- REPLACE with your actual request add‑on command -->
+								<onclick>RunPlugin(plugin://plugin.video.kodiseerr/?mode=request&amp;type=tv&amp;id=$INFO[ListItem.UniqueID(tmdb)])</onclick>
+							</control>
 
-                            <!-- Play -->
-                            <control type="radiobutton" id="80">
+                            <!-- Play button – only when item is directly playable -->
+							<control type="radiobutton" id="80">
 								<visible>!Control.IsVisible(90) + !$EXP[IsTvShowDBTypeNoFallback]</visible>
 								<visible>!$EXP[IsSetDBType]</visible>
-                                <include>Bingie_InfoDialog_Button_Default_Defs</include>
-                                <include content="Bingie_InfoDialog_Button_Texture">
-                                    <param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
-                                </include>
-                                <label>$LOCALIZE[208]$INFO[ListItem.Season, $LOCALIZE[20373] ,]$INFO[ListItem.Episode,: $LOCALIZE[20359] ,]</label>
-                                <radioposx>19</radioposx>
+								<visible>!String.IsEmpty(ListItem.DBID)</visible>
+								<include>Bingie_InfoDialog_Button_Default_Defs</include>
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/play2.png"/>
+								</include>
+								<label>$LOCALIZE[208]$INFO[ListItem.Season, $LOCALIZE[20373] ,]$INFO[ListItem.Episode,: $LOCALIZE[20359] ,]</label>
+								<radioposx>19</radioposx>
 								<radioposy>22</radioposy>
-                                <radiowidth>22</radiowidth>
-                                <radioheight>22</radioheight>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
 								<onclick condition="!Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">Dialog.Close(movieinformation)</onclick>
 								<onclick condition="!String.IsEmpty(ListItem.FileNameAndPath) + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FileNameAndPath]),00:01,silent)</onclick>
 								<onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + !Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FolderPath]),00:01,silent)</onclick>
 								<onclick condition="Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">RunScript(plugin.video.tmdb.bingie.helper,close_dialog=1190)</onclick>
 								<onclick condition="!ListItem.IsFolder + !String.IsEmpty(ListItem.FileNameAndPath) + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FileNameAndPath]),00:04,silent)</onclick>
 								<onclick condition="!ListItem.IsFolder + String.IsEmpty(ListItem.FileNameAndPath) + Window.IsActive(Custom_1190_TMDbBingieHelperCast.xml)">AlarmClock(PlayMovie,PlayMedia($ESCINFO[ListItem.FolderPath]),00:04,silent)</onclick>
+							</control>
+
+							<!-- Request button – only when item is NOT playable -->
+							<control type="radiobutton" id="8003">
+								<visible>!Control.IsVisible(90) + !$EXP[IsTvShowDBTypeNoFallback]</visible>
+								<visible>!$EXP[IsSetDBType]</visible>
+								<visible>String.IsEmpty(ListItem.DBID)</visible>
+								<include>Bingie_InfoDialog_Button_Default_Defs</include>
+								<include content="Bingie_InfoDialog_Button_Texture">
+									<param name="radiotexture" value="dialogs/videoinfo/info/plus.png"/>
+								</include>
+								<label>Request</label>
+								<radioposx>19</radioposx>
+								<radioposy>22</radioposy>
+								<radiowidth>22</radiowidth>
+								<radioheight>22</radioheight>
+								<onclick>RunPlugin(plugin://plugin.video.kodiseerr/?mode=request&amp;type=movie&amp;id=$INFO[ListItem.UniqueID(tmdb)])</onclick>
 							</control>							
 
                             <!-- Resume -->
@@ -1792,7 +1856,7 @@
 
 							<!--More episodes-->
                             <control type="radiobutton" id="53">
-                                <visible>$EXP[IsTvShowDBTypeNoFallback] | $EXP[IsSeasonDBTypeNoFallback] | [$EXP[IsEpisodeDBTypeNoFallback] + !String.IsEmpty(ListItem.DBID)]</visible>
+                                <visible>[$EXP[IsTvShowDBTypeNoFallback] + !String.IsEmpty(ListItem.DBID)] | [$EXP[IsEpisodeDBTypeNoFallback] + !String.IsEmpty(ListItem.DBID)]</visible>
                                 <include>Bingie_InfoDialog_Button_Default_Defs</include>
                                 <include content="Bingie_InfoDialog_Button_Texture">
                                     <param name="radiotexture" value="dialogs/videoinfo/info/more_episodes.png"/>
