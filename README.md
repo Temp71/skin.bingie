@@ -4,7 +4,7 @@ Kodi skin with Netflix layout.
 
 - added some basic German translation
 - added request buttons to content that is not available in Kodi´s library
-- https://github.com/yocksers/KodiSeerr (requirement) tested on v2.1
+- [https://github.com/yocksers/KodiSeerr](https://github.com/Temp71/KodiSeerr) (requirement)
 
 
   Screenshots:
